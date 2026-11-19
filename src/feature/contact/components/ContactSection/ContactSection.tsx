@@ -4,14 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import { Section, SectionHead } from "@/components";
 import { CONTACT_LINKS, EMAIL, NAME_EN, NAME_KO } from "@/constants";
 import { useMagnet, useReveal } from "@/hooks";
-import { ContactFooter, ContactLinks, ContactMail } from "./styles";
+import { InquiryDialog } from "@/feature/inquiry";
+import { ContactFooter, ContactLinks, ContactMail, InquiryButton } from "./styles";
 
 export function ContactSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mailReveal = useReveal<HTMLAnchorElement>();
+  const inquiryReveal = useReveal<HTMLButtonElement>();
   const linksReveal = useReveal<HTMLDivElement>();
   const footerReveal = useReveal<HTMLElement>();
   const [year, setYear] = useState<number | null>(null);
+  const [inquiryOpen, setInquiryOpen] = useState(false);
 
   useMagnet(containerRef);
 
@@ -32,6 +35,15 @@ export function ContactSection() {
         <ContactMail href={`mailto:${EMAIL}`} data-magnet {...mailReveal}>
           {EMAIL}
         </ContactMail>
+        <InquiryButton
+          type="button"
+          data-magnet
+          onClick={() => setInquiryOpen(true)}
+          {...inquiryReveal}
+        >
+          문의 · 제안 남기기
+          <span aria-hidden="true">→</span>
+        </InquiryButton>
         <ContactLinks {...linksReveal}>
           {CONTACT_LINKS.map(({ label, href, external }) => (
             <a
@@ -50,6 +62,7 @@ export function ContactSection() {
           © {year ?? 2026} {NAME_KO} ({NAME_EN})
         </span>
       </ContactFooter>
+      <InquiryDialog open={inquiryOpen} onClose={() => setInquiryOpen(false)} />
     </Section>
   );
 }

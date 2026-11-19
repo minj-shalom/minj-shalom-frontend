@@ -8,3 +8,4 @@ export * from "./Section";
 export * from "./SectionHead";
 export * from "./SectionRail";
 export * from "./Timeline";
+export * from "./Modal";

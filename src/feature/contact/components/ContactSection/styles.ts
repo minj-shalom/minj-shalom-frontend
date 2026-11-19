@@ -22,6 +22,41 @@ export const ContactMail = styled.a`
   padding-bottom: 0.08em;
 `;
 
+export const InquiryButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 34px;
+  padding: 16px 28px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background:
+    linear-gradient(var(--ink), var(--ink)) padding-box,
+    linear-gradient(100deg, var(--cyan), var(--violet) 55%, var(--rose)) border-box;
+  color: var(--ice);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+
+  span {
+    display: inline-block;
+    transition: transform 0.25s;
+  }
+
+  &:hover {
+    background:
+      linear-gradient(100deg, var(--cyan), var(--violet) 55%, var(--rose)) padding-box,
+      linear-gradient(100deg, var(--cyan), var(--violet) 55%, var(--rose)) border-box;
+    color: var(--ink);
+  }
+
+  &:hover span {
+    transform: translateX(5px);
+  }
+`;
+
 export const ContactLinks = styled.div`
   display: flex;
   flex-wrap: wrap;
