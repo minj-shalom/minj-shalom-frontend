@@ -1,3 +1,7 @@
+import { axios } from "@/configs";
+import { SEND_INQUIRY_MUTATE_KEY } from "@/constants";
+import type { ResponseType } from "@/types";
+import { useMutation } from "@tanstack/react-query";
 import type { InquiryType } from "../constants/inquiry";
 
 export interface InquiryPayload {
@@ -10,12 +14,16 @@ export interface InquiryPayload {
   website: string;
 }
 
-/**
- * 문의 · 제안 보내기.
- * 지금은 화면만 만든 단계라 서버로 보내지 않고 성공한 것처럼 응답해요.
- * 백엔드가 생기면 이 함수에서 API 를 호출하세요 (실패하면 예외를 던지면 화면이 오류 상태로 바뀌어요).
- */
-export async function sendInquiry(payload: InquiryPayload): Promise<void> {
-  void payload;
-  await new Promise((resolve) => setTimeout(resolve, 900));
+/** 문의 · 제안 보내기 (POST /site/inquiries - IP 당 1시간에 5회) */
+export const sendInquiry = async ({ data }: { data: InquiryPayload }) => {
+  const response = await axios.post<ResponseType<null>>("/site/inquiries", data);
+
+  return response?.data;
+};
+
+export function useSendInquiry() {
+  return useMutation({
+    mutationKey: [SEND_INQUIRY_MUTATE_KEY],
+    mutationFn: ({ data }: { data: InquiryPayload }) => sendInquiry({ data }),
+  });
 }

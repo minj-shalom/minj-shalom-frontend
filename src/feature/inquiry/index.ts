@@ -1,3 +1,3 @@
-export * from "./api/sendInquiry";
+export * from "./api";
 export * from "./components";
 export * from "./constants/inquiry";

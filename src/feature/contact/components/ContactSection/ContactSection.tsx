@@ -2,12 +2,25 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Section, SectionHead } from "@/components";
-import { CONTACT_LINKS, EMAIL, NAME_EN, NAME_KO } from "@/constants";
+import type { ContactLinkInterface, SectionContent } from "@/feature/content/types";
 import { useMagnet, useReveal } from "@/hooks";
 import { InquiryDialog } from "@/feature/inquiry";
+import { recordVisitEvent } from "@/feature/visit/api";
 import { ContactFooter, ContactLinks, ContactMail, InquiryButton } from "./styles";
 
-export function ContactSection() {
+export function ContactSection({
+  section,
+  links,
+  email,
+  nameKo,
+  nameEn,
+}: {
+  section: SectionContent;
+  links: ContactLinkInterface[];
+  email: string;
+  nameKo: string;
+  nameEn: string;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mailReveal = useReveal<HTMLAnchorElement>();
   const inquiryReveal = useReveal<HTMLButtonElement>();
@@ -27,25 +40,25 @@ export function ContactSection() {
 
   return (
     <Section id="contact" compactBottom>
-      <SectionHead
-        title="이야기 나눠요"
-        description="채용, 협업, 연구 제안 모두 메일로 편하게 보내 주세요."
-      />
+      <SectionHead title={section.title} description={section.description} />
       <div ref={containerRef}>
-        <ContactMail href={`mailto:${EMAIL}`} data-magnet {...mailReveal}>
-          {EMAIL}
+        <ContactMail href={`mailto:${email}`} data-magnet {...mailReveal}>
+          {email}
         </ContactMail>
         <InquiryButton
           type="button"
           data-magnet
-          onClick={() => setInquiryOpen(true)}
+          onClick={() => {
+            recordVisitEvent("inquiry-open");
+            setInquiryOpen(true);
+          }}
           {...inquiryReveal}
         >
           문의 · 제안 남기기
           <span aria-hidden="true">→</span>
         </InquiryButton>
         <ContactLinks {...linksReveal}>
-          {CONTACT_LINKS.map(({ label, href, external }) => (
+          {links.map(({ label, href, external }) => (
             <a
               key={label}
               href={href}
@@ -59,7 +72,7 @@ export function ContactSection() {
       </div>
       <ContactFooter {...footerReveal}>
         <span>
-          © {year ?? 2026} {NAME_KO} ({NAME_EN})
+          © {year ?? 2026} {nameKo} ({nameEn})
         </span>
       </ContactFooter>
       <InquiryDialog open={inquiryOpen} onClose={() => setInquiryOpen(false)} />

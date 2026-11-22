@@ -1,8 +1,8 @@
 "use client";
 
-import { Section, SectionHead, Timeline } from "@/components";
+import { Section, SectionHead, Timeline, type TimelineEntry } from "@/components";
+import type { SectionContent } from "@/feature/content/types";
 import { useReveal } from "@/hooks";
-import { EDUCATION_ENTRIES, LICENSES } from "../../constants";
 import { LicenseInterface } from "../../types";
 import { LicenseItem, LicenseList, SubTitle } from "./styles";
 
@@ -24,19 +24,24 @@ function LicenseRow({
   );
 }
 
-export function EducationSection() {
+export function EducationSection({
+  section,
+  entries,
+  licenses,
+}: {
+  section: SectionContent;
+  entries: TimelineEntry[];
+  licenses: LicenseInterface[];
+}) {
   const subReveal = useReveal<HTMLHeadingElement>();
 
   return (
     <Section id="edu">
-      <SectionHead
-        title="배운 곳"
-        description="최종 학력은 인천대학교 졸업입니다."
-      />
-      <Timeline entries={EDUCATION_ENTRIES} />
+      <SectionHead title={section.title} description={section.description} />
+      <Timeline entries={entries} />
       <SubTitle {...subReveal}>자격</SubTitle>
       <LicenseList>
-        {LICENSES.map((license, index) => (
+        {licenses.map((license, index) => (
           <LicenseRow key={license.name} license={license} index={index} />
         ))}
       </LicenseList>

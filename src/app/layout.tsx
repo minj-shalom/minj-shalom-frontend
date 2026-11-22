@@ -6,12 +6,7 @@ import {
   SITE_URL,
   StyledComponentsRegistry,
 } from "@/configs";
-import { NAME_EN, NAME_KO } from "@/constants";
-import {
-  SITE_DESCRIPTION,
-  SITE_KEYWORDS,
-  SITE_TITLE,
-} from "@/feature/seo/constants";
+import { getSiteContent } from "@/feature/content";
 import { AppProvider } from "./provider";
 
 const bricolage = Bricolage_Grotesque({
@@ -21,7 +16,12 @@ const bricolage = Bricolage_Grotesque({
   display: "swap",
 });
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const { hero, seo } = await getSiteContent();
+  const { nameKo: NAME_KO, nameEn: NAME_EN } = hero;
+  const { title: SITE_TITLE, description: SITE_DESCRIPTION, keywords: SITE_KEYWORDS } = seo;
+
+  return {
   metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
@@ -63,6 +63,7 @@ export const metadata: Metadata = {
       : undefined,
   },
 };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0a0e24",

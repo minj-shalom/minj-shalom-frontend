@@ -1,11 +1,11 @@
-import { Section, SectionHead, Timeline } from "@/components";
-import { CAREER_ENTRIES } from "../../constants";
+import { Section, SectionHead, Timeline, type TimelineEntry } from "@/components";
+import type { SectionContent } from "@/feature/content/types";
 
-export function CareerSection() {
+export function CareerSection({ section, entries }: { section: SectionContent; entries: TimelineEntry[] }) {
   return (
     <Section id="path">
-      <SectionHead title="일해 온 곳" />
-      <Timeline entries={CAREER_ENTRIES} />
+      <SectionHead title={section.title} description={section.description} />
+      <Timeline entries={entries} />
     </Section>
   );
 }

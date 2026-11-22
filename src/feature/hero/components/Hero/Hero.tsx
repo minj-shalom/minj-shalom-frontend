@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { NAME_EN, NAME_KO } from "@/constants";
+import type { HeroContent } from "@/feature/content/types";
 import { useFinePointer, useReducedMotion } from "@/hooks";
 import {
   HeroSide,
@@ -21,7 +21,8 @@ import {
   HeroTitle,
 } from "./styles";
 
-export function Hero() {
+export function Hero({ content }: { content: HeroContent }) {
+  const { nameKo, nameEn } = content;
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -37,7 +38,7 @@ export function Hero() {
     onTouch: () => setTouched(true),
   });
 
-  const { value, done } = useScrambleText(NAME_EN, !reduced);
+  const { value, done } = useScrambleText(nameEn, !reduced);
   const waving = fine && done;
   useLetterWave(heroRef, titleRef, waving);
 
@@ -52,10 +53,10 @@ export function Hero() {
       </HeroHint>
 
       <HeroCopy>
-        <HeroNameKo>{NAME_KO}</HeroNameKo>
-        <HeroTitle ref={titleRef} aria-label={NAME_EN}>
+        <HeroNameKo>{nameKo}</HeroNameKo>
+        <HeroTitle ref={titleRef} aria-label={nameEn}>
           {waving
-            ? [...NAME_EN].map((char, i) =>
+            ? [...nameEn].map((char, i) =>
                 char === " " ? (
                   " "
                 ) : (
@@ -67,19 +68,19 @@ export function Hero() {
             : value}
         </HeroTitle>
         <HeroLede>
-          프론트엔드와 백엔드를 모두 다루는 풀스택 개발자입니다.
+          {content.lede1}
           <br />
-          AI 연구에서는 주로 에이전트를 만듭니다.
+          {content.lede2}
         </HeroLede>
 
         <HeroAxis>
           <HeroAxisItem $tone="cyan" $active={side === "left"}>
-            <b>풀스택 개발</b>
-            <span>프론트엔드부터 백엔드까지 직접 구현합니다.</span>
+            <b>{content.leftTitle}</b>
+            <span>{content.leftDesc}</span>
           </HeroAxisItem>
           <HeroAxisItem $tone="violet" $active={side === "right"} $right>
-            <b>AI 연구</b>
-            <span>LLM 에이전트와 RAG를 구축합니다.</span>
+            <b>{content.rightTitle}</b>
+            <span>{content.rightDesc}</span>
           </HeroAxisItem>
         </HeroAxis>
       </HeroCopy>

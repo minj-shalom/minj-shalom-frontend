@@ -11,3 +11,11 @@ export const GOOGLE_SITE_VERIFICATION =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
 export const NAVER_SITE_VERIFICATION =
   process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION;
+
+/**
+ * @description 백엔드(minj-shalom-backend) 주소. 끝의 슬래시는 제거하며 `/api` 는 axios 가 붙입니다.
+ * 브라우저에서도 호출하므로 `NEXT_PUBLIC_` 값이고, 빌드 시점에 번들에 박힙니다.
+ */
+export const API_ENDPOINT = (
+  process.env.NEXT_PUBLIC_API_ENDPOINT || "http://localhost:4000"
+).replace(/\/+$/, "");

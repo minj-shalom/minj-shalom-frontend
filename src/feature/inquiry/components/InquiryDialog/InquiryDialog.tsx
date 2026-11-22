@@ -2,7 +2,8 @@
 
 import { FormEvent, useId, useRef, useState } from "react";
 import { Modal } from "@/components";
-import { sendInquiry } from "../../api/sendInquiry";
+import { recordVisitEvent } from "@/feature/visit/api";
+import { useSendInquiry } from "../../api";
 import {
   INQUIRY_LIMITS,
   INQUIRY_TYPES,
@@ -60,6 +61,7 @@ export function InquiryDialog({ open, onClose }: { open: boolean; onClose: () =>
   const [values, setValues] = useState<Values>(EMPTY);
   const [touched, setTouched] = useState<Partial<Record<keyof Errors, boolean>>>({});
   const [status, setStatus] = useState<Status>("idle");
+  const { mutateAsync: sendInquiry } = useSendInquiry();
 
   const errors = validate(values);
   const show = (k: keyof Errors) => (touched[k] ? errors[k] : undefined);
@@ -89,7 +91,8 @@ export function InquiryDialog({ open, onClose }: { open: boolean; onClose: () =>
     }
     setStatus("sending");
     try {
-      await sendInquiry({ type: values.type, name: values.name.trim(), email: values.email.trim(), title: values.title.trim(), message: values.message.trim(), website: values.website });
+      await sendInquiry({ data: { type: values.type, name: values.name.trim(), email: values.email.trim(), title: values.title.trim(), message: values.message.trim(), website: values.website } });
+      recordVisitEvent("inquiry-sent");
       setStatus("done");
     } catch {
       setStatus("error");
